@@ -1,0 +1,75 @@
+text,category,priority
+need permissions for folder,Account,Low
+getting error 500 on dashboard,Technical,High
+i was charged twice for my subscription this month,Billing,Medium
+need to change my email address,Account,Low
+how does your service work,General,Low
+laptop wont turn on,Technical,Medium
+want to delete my account,Account,Low
+quality is poor,General,Low
+need admin access to system,Account,Low
+printer not connecting to network,Technical,Medium
+cannot connect to server,Technical,High
+what features are in premium plan,General,Low
+bank account was hacked,Account,Low
+what integrations do you support,General,Medium
+password expired and cannot reset,Account,High
+my credit card payment failed but money was deducted,Billing,High
+cannot access shared drive,Technical,High
+features not working as expected,Technical,High
+how to contact sales team,General,Low
+long wait times for support,General,Medium
+atm ate my card,Technical,Medium
+unauthorized charges on my credit card,Billing,Medium
+poor customer service experience,General,Low
+general complaint,General,Low
+integration with api not working,Technical,High
+cannot change account settings,Account,High
+blue screen error on startup,Technical,High
+do you offer student discounts,General,Low
+can i export my data,General,Low
+representative was unhelpful,General,Low
+is there a mobile app,General,Low
+payment declined but account still active,Billing,Medium
+slow network speed,Technical,Medium
+charged for service i didnt use,Billing,Medium
+product doesnt work as advertised,General,Low
+user account locked,Account,High
+wifi not working,Technical,High
+cannot access company portal,Account,High
+need receipt for last transaction,Billing,Medium
+wrong item shipped,General,Low
+account locked after failed login attempts,Account,High
+software installation failed,Technical,High
+username already taken,Account,Low
+where is the documentation,General,Low
+cannot access online banking,Technical,High
+cannot login to my account,Technical,High
+general it inquiry,General,Low
+system is very slow,Technical,Medium
+profile information not updating,Account,Low
+subscription autorenewed without notice,Billing,Medium
+product arrived damaged,General,Low
+invoice shows incorrect amount,Billing,Medium
+missing parts in package,General,Low
+billing cycle is wrong on my account,Billing,Medium
+data sync failed,Technical,High
+website not loading properly,Technical,Medium
+twofactor authentication not working,Account,High
+no response to my emails,General,Low
+keyboard keys not working,Technical,High
+computer running very slow,Technical,Medium
+what are your business hours,General,Low
+issue not resolved after multiple calls,General,Medium
+what is your refund policy,General,Low
+network drive not accessible,Technical,Medium
+how do i reset my password,Account,Low
+mobile app keeps freezing,Technical,Medium
+need refund for cancelled service,Billing,Medium
+need to add team members,Account,Low
+fraudulent transaction on account,Billing,Medium
+cannot update payment method,Billing,High
+app crashes when i try to upload files,Technical,High
+internet connection dropping,Technical,Medium
+cannot verify my email,Account,High
+vpn connection issues,Technical,Medium
