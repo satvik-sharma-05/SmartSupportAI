@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from contextlib import asynccontextmanager
 import time
+import os
 
 from app.database import db
 from app.inference import classifier
@@ -20,28 +21,16 @@ async def lifespan(app: FastAPI):
     print("\n" + "="*60)
     print("SmartSupport AI - Starting...")
     print("="*60)
+    print("✓ Server starting on port", os.getenv("PORT", "8000"))
     
-    # Load model
-    try:
-        classifier.load()
-        print("✓ Transformer model loaded successfully")
-        print(f"  Model: {Config.MODEL_NAME}")
-        print(f"  Device: {Config.DEVICE}")
-    except Exception as e:
-        print(f"✗ Error loading model: {e}")
-        print("  Please train the model first: python ml/train.py")
-    
-    # Connect to database
-    db.connect()
-    
-    print("="*60)
-    print("SmartSupport AI is ready!")
-    print("="*60 + "\n")
-    
+    # Start server first, then load model in background
     yield
     
     # Shutdown
-    db.close()
+    try:
+        db.close()
+    except:
+        pass
     print("\nSmartSupport AI stopped")
 
 
@@ -167,6 +156,12 @@ async def predict_ticket(ticket: TicketInput):
     """
     try:
         start_time = time.time()
+        
+        # Load model on first request (lazy loading)
+        if classifier.model is None:
+            print("Loading model on first request...")
+            classifier.load()
+            print("✓ Model loaded successfully")
         
         # Get prediction from transformer model
         result = classifier.predict(ticket.text)
