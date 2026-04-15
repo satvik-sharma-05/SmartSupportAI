@@ -48,8 +48,10 @@ Fill in these settings:
 
 **Start Command**:
 ```bash
-pip install gdown && gdown --fuzzy https://drive.google.com/file/d/1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG/view -O models/smartsupport_model/model.pt && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+bash start.sh
 ```
+
+Note: The `start.sh` script automatically downloads the model from Google Drive on first deployment.
 
 **Instance Type:**
 - Select "Free" (0.1 CPU, 512 MB RAM)
