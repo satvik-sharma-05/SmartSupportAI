@@ -16,7 +16,7 @@ https://drive.google.com/file/d/1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG/view
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**:
      ```bash
-     mkdir -p models/smartsupport_model && wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG&confirm=t' -O models/smartsupport_model/model.pt && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+     pip install gdown && gdown --fuzzy https://drive.google.com/file/d/1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG/view -O models/smartsupport_model/model.pt && uvicorn app.main:app --host 0.0.0.0 --port $PORT
      ```
    - **Instance Type**: Free
 5. Add Environment Variable:
