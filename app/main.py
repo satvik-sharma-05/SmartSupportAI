@@ -123,15 +123,27 @@ async def root():
 async def health_check():
     """Health check endpoint"""
     try:
+        import os
+        
         # Check if model is loaded
         model_loaded = classifier.model is not None
+        
+        # Check if model file exists (might be downloading)
+        model_exists = os.path.exists("models/smartsupport_model/model.pt")
         
         # Check database connection
         db_connected = db.client is not None
         
+        status = "healthy"
+        if not model_loaded and not model_exists:
+            status = "starting"  # Model still downloading
+        elif not model_loaded and model_exists:
+            status = "ready"  # Model downloaded but not loaded yet
+        
         return {
-            "status": "healthy" if model_loaded else "degraded",
+            "status": status,
             "model_loaded": model_loaded,
+            "model_exists": model_exists,
             "database_connected": db_connected,
             "model": Config.MODEL_NAME,
             "device": str(Config.DEVICE),
@@ -155,7 +167,15 @@ async def predict_ticket(ticket: TicketInput):
     The model uses multi-task learning to jointly predict category and priority.
     """
     try:
+        import os
         start_time = time.time()
+        
+        # Check if model file exists
+        if not os.path.exists("models/smartsupport_model/model.pt"):
+            raise HTTPException(
+                status_code=503,
+                detail="Model is still downloading. Please try again in a few moments."
+            )
         
         # Load model on first request (lazy loading)
         if classifier.model is None:
@@ -192,6 +212,8 @@ async def predict_ticket(ticket: TicketInput):
             model=Config.MODEL_NAME
         )
     
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=500,

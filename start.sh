@@ -6,35 +6,34 @@ echo "PORT: $PORT"
 echo "Python version:"
 python --version
 
-# Download model if not exists
-if [ ! -f "models/smartsupport_model/model.pt" ]; then
-    echo "Downloading model from Google Drive..."
-    pip install -q gdown
-    mkdir -p models/smartsupport_model
-    
-    # Use correct gdown syntax (no --fuzzy flag)
-    gdown 1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG -O models/smartsupport_model/model.pt
-    
-    if [ -f "models/smartsupport_model/model.pt" ]; then
-        echo "✓ Model downloaded successfully ($(du -h models/smartsupport_model/model.pt | cut -f1))"
+# Function to download model in background
+download_model() {
+    if [ ! -f "models/smartsupport_model/model.pt" ]; then
+        echo "📥 Downloading model in background..."
+        pip install -q gdown
+        mkdir -p models/smartsupport_model
+        
+        gdown 1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG -O models/smartsupport_model/model.pt
+        
+        if [ -f "models/smartsupport_model/model.pt" ]; then
+            echo "✓ Model downloaded successfully ($(du -h models/smartsupport_model/model.pt | cut -f1))"
+        else
+            echo "✗ Model download failed!"
+        fi
     else
-        echo "✗ Model download failed!"
-        exit 1
+        echo "✓ Model already exists ($(du -h models/smartsupport_model/model.pt | cut -f1))"
     fi
-else
-    echo "✓ Model already exists ($(du -h models/smartsupport_model/model.pt | cut -f1))"
-fi
+    
+    # Create metadata file if missing
+    if [ ! -f "models/smartsupport_model/metadata.json" ]; then
+        echo '{"model_name":"distilbert-base-uncased","num_categories":4,"num_priorities":3}' > models/smartsupport_model/metadata.json
+        echo "✓ Created metadata.json"
+    fi
+}
 
-# Create metadata file if missing
-if [ ! -f "models/smartsupport_model/metadata.json" ]; then
-    echo '{"model_name":"distilbert-base-uncased","num_categories":4,"num_priorities":3}' > models/smartsupport_model/metadata.json
-    echo "✓ Created metadata.json"
-fi
+# Start model download in background (non-blocking)
+download_model &
 
-# Quick import test (with timeout to prevent hanging)
-echo "Testing app import..."
-timeout 30s python -c "from app.main import app; print('✓ App imported successfully')" || echo "⚠ Import test timed out (this is OK, continuing...)"
-
-# Start server
-echo "Starting uvicorn on 0.0.0.0:$PORT..."
+# Start server immediately (don't wait for model)
+echo "🚀 Starting uvicorn on 0.0.0.0:$PORT..."
 exec uvicorn app.main:app --host 0.0.0.0 --port $PORT --timeout-keep-alive 120
