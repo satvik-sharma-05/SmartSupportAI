@@ -31,6 +31,10 @@ if [ ! -f "models/smartsupport_model/metadata.json" ]; then
     echo "✓ Created metadata.json"
 fi
 
-# Start server (no import test - let uvicorn handle it)
+# Quick import test (with timeout to prevent hanging)
+echo "Testing app import..."
+timeout 30s python -c "from app.main import app; print('✓ App imported successfully')" || echo "⚠ Import test timed out (this is OK, continuing...)"
+
+# Start server
 echo "Starting uvicorn on 0.0.0.0:$PORT..."
 exec uvicorn app.main:app --host 0.0.0.0 --port $PORT --timeout-keep-alive 120

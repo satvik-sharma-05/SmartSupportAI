@@ -32,8 +32,8 @@ class Config:
     TOKENIZER_SAVE_PATH = "models/smartsupport_tokenizer"
     BEST_MODEL_PATH = "models/best_model.pt"
     
-    # Device
-    DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # Device (set to CPU by default for faster startup, will use GPU if available when model loads)
+    DEVICE = "cpu"  # Will be updated to actual device when model loads
     
     # Training Split
     TRAIN_SPLIT = 0.7

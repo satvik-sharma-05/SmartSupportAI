@@ -26,6 +26,11 @@ class ModelLoader:
         if self._model is None or self._tokenizer is None:
             print("Loading model and tokenizer...")
             
+            # Set device (do this here, not at import time)
+            import torch
+            Config.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            print(f"  Device: {Config.DEVICE}")
+            
             # Check if model exists
             model_path = f"{Config.MODEL_SAVE_PATH}/model.pt"
             if not os.path.exists(model_path):
@@ -72,7 +77,6 @@ class ModelLoader:
             self._model.eval()
             
             print(f"✓ Model loaded from {model_path}")
-            print(f"✓ Device: {Config.DEVICE}")
         
         return self._model, self._tokenizer
     
