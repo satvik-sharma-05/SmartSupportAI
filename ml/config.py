@@ -2,7 +2,6 @@
 Configuration for SmartSupport AI transformer model training
 Enhanced for production-grade performance
 """
-import torch
 
 class Config:
     # Model Configuration

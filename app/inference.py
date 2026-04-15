@@ -1,7 +1,6 @@
 """
 Inference utilities for ticket classification
 """
-import torch
 from typing import Dict
 import time
 
@@ -30,6 +29,9 @@ class TicketClassifier:
         Returns:
             Dictionary with predictions and confidence scores
         """
+        # Import torch only when needed
+        import torch
+        
         if self.model is None or self.tokenizer is None:
             self.load()
         
