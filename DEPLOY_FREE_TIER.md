@@ -1,155 +1,87 @@
-# 🚀 FREE TIER DEPLOYMENT (No ML Model)
+# 🚀 Deployment Guide
 
-## The Problem
-Your ML model (704MB) + PyTorch dependencies exceed Render's free tier 512MB RAM limit.
+## Current Deployment (Live)
 
-## The Solution
-Use the lightweight rule-based classifier instead of the ML model.
+✅ **Backend**: https://smartsupportai-backend.onrender.com
+✅ **Frontend**: https://smart-support-ai-sandy.vercel.app/
+
+This app is deployed on **100% FREE** tier using:
+- **Render Free Tier** (Backend)
+- **Vercel Free Tier** (Frontend)
 
 ---
 
-## Option 1: Deploy Lightweight Version (100% FREE) ✅
+## Deploy Your Own Instance
 
-### What Changes:
-- ❌ No PyTorch/transformers (saves ~400MB RAM)
-- ❌ No 704MB model download
-- ✅ Rule-based keyword matching classifier
-- ✅ Still works! ~70-80% accuracy
-- ✅ Instant startup (< 5 seconds)
-- ✅ Fits in 512MB RAM
+### Backend (Render)
 
-### Steps:
+1. **Create Render Account**
+   - Go to https://render.com
+   - Sign up with GitHub
 
-1. **Update Render Configuration:**
-   - Go to your Render dashboard
-   - Click your service
-   - Go to "Settings"
+2. **Create Web Service**
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
 
-2. **Change Build Command:**
-   ```bash
-   pip install -r requirements-minimal.txt
-   ```
+3. **Configure Service**
+   - **Name**: `smartsupportai-backend` (or your choice)
+   - **Branch**: `main`
+   - **Runtime**: Python 3
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `bash start.sh`
+   - **Instance Type**: Free
 
-3. **Change Start Command:**
-   ```bash
-   bash start-lightweight.sh
-   ```
-
-4. **Save Changes**
-   - Click "Save Changes"
-   - Render will auto-deploy
-
-5. **Test:**
+4. **Deploy**
+   - Click "Create Web Service"
    - Wait 2-3 minutes for deployment
-   - Visit: `https://your-app.onrender.com/health`
-   - Should see: `{"status": "healthy", "model": "rule-based-v1"}`
+   - Your backend will be live at `https://your-app.onrender.com`
 
-### How It Works:
-The lightweight classifier uses keyword matching:
+### Frontend (Vercel)
 
-**Billing Keywords:** charge, payment, bill, invoice, subscription, refund
-**Technical Keywords:** crash, error, bug, broken, not working
-**Account Keywords:** login, password, sign in, access, account
-**General Keywords:** how, what, when, feature, plan, help
+1. **Create Vercel Account**
+   - Go to https://vercel.com
+   - Sign up with GitHub
 
-**Example:**
-```
-Input: "I was charged twice for my subscription"
-Output: Category=Billing (95%), Priority=High (85%)
-```
+2. **Import Project**
+   - Click "Add New..." → "Project"
+   - Select your repository
 
----
+3. **Configure Project**
+   - **Framework**: Vite
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
 
-## Option 2: Deploy Full ML Model (PAID) 💰
+4. **Add Environment Variable**
+   - **Name**: `VITE_API_URL`
+   - **Value**: `https://your-backend.onrender.com` (from step 1)
 
-If you need the full transformer model:
-
-### Render Paid Plans:
-- **Starter ($7/month)**: 512MB RAM - Still too small
-- **Standard ($21/month)**: 2GB RAM - ✅ Will work
-- **Pro ($85/month)**: 4GB RAM - ✅ Fast
-
-### Alternative Free Platforms with More RAM:
-1. **Railway** - 512MB free (same issue)
-2. **Fly.io** - 256MB free (worse)
-3. **Google Cloud Run** - 512MB free (same issue)
-4. **AWS Lambda** - 512MB-10GB (complex setup)
-
-### Best Option for ML Model:
-**Hugging Face Spaces (FREE with GPU!)**
-- 16GB RAM
-- Free GPU
-- Perfect for ML models
-
-Steps:
-1. Go to https://huggingface.co/spaces
-2. Create new Space
-3. Choose "Gradio" or "FastAPI"
-4. Upload your model
-5. Deploy for free!
+5. **Deploy**
+   - Click "Deploy"
+   - Wait 2-3 minutes
+   - Your frontend will be live at `https://your-app.vercel.app`
 
 ---
 
-## Option 3: Hybrid Approach (RECOMMENDED) 🎯
+## Testing Your Deployment
 
-**Frontend:** Vercel (Free)
-**Backend (Lightweight):** Render Free Tier
-**ML Model:** Hugging Face Spaces (Free)
-
-Your backend calls Hugging Face API when it needs ML predictions.
-
----
-
-## Comparison:
-
-| Feature | Lightweight | Full ML Model |
-|---------|------------|---------------|
-| Cost | FREE | $21/month |
-| RAM | < 200MB | > 1GB |
-| Startup | 5 seconds | 60 seconds |
-| Accuracy | ~75% | ~90% |
-| Speed | 2ms | 150ms |
-| Deployment | Easy | Complex |
-
----
-
-## Recommendation:
-
-**For Demo/Portfolio:** Use lightweight version (FREE)
-**For Production:** Use paid plan or Hugging Face Spaces
-
----
-
-## Quick Deploy Commands:
-
-### Deploy Lightweight (Free):
+### Test Backend
 ```bash
-# In Render dashboard:
-Build: pip install -r requirements-minimal.txt
-Start: bash start-lightweight.sh
+curl https://your-backend.onrender.com/health
 ```
 
-### Deploy Full Model (Paid):
-```bash
-# In Render dashboard:
-Build: pip install -r requirements.txt
-Start: bash start.sh
-Instance: Standard ($21/month)
+Expected response:
+```json
+{
+  "status": "healthy",
+  "model_loaded": true,
+  "model": "rule-based-v1"
+}
 ```
 
----
-
-## Testing Lightweight Version Locally:
-
+### Test Prediction
 ```bash
-# Install minimal dependencies
-pip install -r requirements-minimal.txt
-
-# Run lightweight server
-uvicorn app.main_lightweight:app --host 0.0.0.0 --port 8000
-
-# Test
-curl -X POST http://localhost:8000/predict \
+curl -X POST https://your-backend.onrender.com/predict \
   -H "Content-Type: application/json" \
   -d '{"text": "I was charged twice for my subscription"}'
 ```
@@ -168,10 +100,87 @@ Expected response:
 
 ---
 
-## Next Steps:
+## Architecture
 
-1. **Try lightweight version first** (it's free!)
-2. **If accuracy is good enough** → Keep it
-3. **If you need better accuracy** → Upgrade to paid plan or use Hugging Face
+### Current Setup (Free Tier)
+- **Classification**: Rule-based keyword matching
+- **RAM Usage**: < 200MB
+- **Startup Time**: 5 seconds
+- **Accuracy**: ~75-80%
+- **Cost**: $0/month
 
-Your choice! 🚀
+### Why Rule-Based?
+The free tier has 512MB RAM limit. A full ML model (PyTorch + transformers + 704MB model) exceeds this limit. The rule-based classifier provides good accuracy while staying within free tier limits.
+
+---
+
+## Upgrading to ML Model (Optional)
+
+If you need higher accuracy (~90%), you can upgrade:
+
+### Option 1: Paid Render Plan
+- Upgrade to Standard plan ($21/month)
+- Gives 2GB RAM
+- Can run full PyTorch model
+
+### Option 2: Hugging Face Spaces
+- Deploy ML model to HF Spaces (Free with GPU!)
+- Keep lightweight backend on Render
+- Backend calls HF API for predictions
+
+---
+
+## Troubleshooting
+
+### Backend Issues
+
+**"Application failed to respond"**
+- Check Render logs for errors
+- Verify start command is correct
+- Free tier sleeps after 15 min inactivity (first request will be slow)
+
+**"Out of memory"**
+- You're using the full ML model
+- Switch to lightweight version (this repo)
+- Or upgrade to paid plan
+
+### Frontend Issues
+
+**"Network Error"**
+- Check `VITE_API_URL` environment variable
+- Verify backend is running
+- Check browser console for CORS errors
+
+**Can't connect to backend**
+- Make sure backend URL doesn't have trailing slash
+- Verify backend health endpoint works
+- Check Vercel environment variables
+
+---
+
+## Free Tier Limits
+
+### Render Free Tier
+- 512MB RAM
+- 750 hours/month (enough for 24/7)
+- Sleeps after 15 min inactivity
+- 100GB bandwidth/month
+
+### Vercel Free Tier
+- 100GB bandwidth/month
+- Unlimited deployments
+- Automatic HTTPS
+- Global CDN
+
+---
+
+## Next Steps
+
+1. ✅ Deploy backend to Render
+2. ✅ Deploy frontend to Vercel
+3. ✅ Test the application
+4. 🎉 Share your project!
+
+---
+
+**Need help?** Open an issue on GitHub!
