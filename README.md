@@ -48,9 +48,12 @@ cd SmartSupportAI
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Download the trained model (703MB - see MODEL_DOWNLOAD.md)
-# The model is too large for GitHub, download from:
-# [Add your Google Drive/Hugging Face link here]
+# Download the trained model (703MB)
+# Download from Google Drive:
+wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG' -O models/smartsupport_model/model.pt
+
+# Or download manually from:
+# https://drive.google.com/file/d/1Igb0dGI6-HlyccZWe8F82c2XA5m7TyZG/view
 # Place it in: models/smartsupport_model/model.pt
 
 # Create .env file
